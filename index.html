@@ -1,30 +1,42 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<script>
-function test() {
-    navigator.geolocation.getCurrentPosition(test2);
-}
-
-function test2(position) {
-
-    var geo_text = "緯度:" + position.coords.latitude + "\n";
-    geo_text += "経度:" + position.coords.longitude + "\n";
-    geo_text += "高度:" + position.coords.altitude + "\n";
-
-    var date = new Date(position.timestamp);
-
-    geo_text += "取得時刻:" + date.toLocaleString() + "\n";
-
-
-}
-</script>
-$.post('https://httpbin.org/post','name=geo_text)
+    <title>テキストの複製とコピー</title>
 </head>
 <body>
+    <input type="text" id="userText" placeholder="テキストを入力してください">
+    <input type="number" id="repeatCount" placeholder="繰り返し回数">
+    <button id="copyButton">コピー</button>
 
-<button onclick="test()">test</button>
+    <script>
+        document.getElementById("copyButton").addEventListener("click", function() {
+            var userText = document.getElementById("userText").value; // ユーザーが入力したテキスト
+            var repeatCount = parseInt(document.getElementById("repeatCount").value) || 1; // 繰り返し回数
 
+            if (userText) {
+                // テキストを指定回数だけ繰り返し、コピー
+                var copiedText = userText.repeat(repeatCount);
+
+                // 新しいtextarea要素を作成し、そこにコピーしたテキストを設定
+                var textarea = document.createElement("textarea");
+                textarea.value = copiedText;
+
+                // textarea要素をページに追加
+                document.body.appendChild(textarea);
+
+                // textareaを選択し、コピー
+                textarea.select();
+                document.execCommand("copy");
+
+                // textareaを削除
+                document.body.removeChild(textarea);
+
+                // コピーが完了したことを通知
+                alert("テキストがコピーされました: " + copiedText);
+            } else {
+                alert("テキストを入力してください。");
+            }
+        });
+    </script>
 </body>
 </html>
