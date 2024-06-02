@@ -1,65 +1,78 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
-    <title>テキストの複製とコピー</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>繰り返される文字列の一覧</title>
     <style>
-        body {
-            background-color: #646464; /* グレーの背景色 */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        input {
-            width: 80%;
-            padding: 10px;
+        .substring {
+            display: inline-block;
             margin: 5px;
-            font-size: 16px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            cursor: pointer;
         }
-
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
+        .substring:hover {
+            background-color: #f0f0f0;
         }
     </style>
 </head>
 <body>
-    <input type="text" id="userText" placeholder="テキストを入力してください">
-    <input type="number" id="repeatCount" placeholder="繰り返し回数">
-    <button id="copyButton">コピー</button>
+    <h1>繰り返される文字列の一覧を表示</h1>
+    <input type="text" id="inputString" placeholder="文字列を入力してください">
+    <button onclick="displayRepeatingSubstrings()">表示</button>
+    <div id="result"></div>
 
     <script>
-        document.getElementById("copyButton").addEventListener("click", function() {
-            var userText = document.getElementById("userText").value; // ユーザーが入力したテキスト
-            var repeatCount = parseInt(document.getElementById("repeatCount").value) || 1; // 繰り返し回数
+        function displayRepeatingSubstrings() {
+            let inputString = document.getElementById('inputString').value;
+            let substrings = findRepeatingSubstrings(inputString);
+            
+            let resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = ''; // 結果をクリア
 
-            if (userText) {
-                // テキストを指定回数だけ繰り返し、コピー
-                var copiedText = userText.repeat(repeatCount);
-
-                // 新しいtextarea要素を作成し、そこにコピーしたテキストを設定
-                var textarea = document.createElement("textarea");
-                textarea.value = copiedText;
-
-                // textarea要素をページに追加
-                document.body.appendChild(textarea);
-
-                // textareaを選択し、コピー
-                textarea.select();
-                document.execCommand("copy");
-
-                // textareaを削除
-                document.body.removeChild(textarea);
-
-                // コピーが完了したことを通知
-                alert("テキストがコピーされました: " + copiedText);
+            if (substrings.length > 0) {
+                substrings.forEach(substring => {
+                    let substringElement = document.createElement('span');
+                    substringElement.className = 'substring';
+                    substringElement.textContent = substring;
+                    substringElement.onclick = () => copyToClipboard(substring);
+                    resultDiv.appendChild(substringElement);
+                });
             } else {
-                alert("テキストを入力してください。");
+                resultDiv.innerHTML = '<p>繰り返される文字列はありません。</p>';
             }
-        });
+        }
+
+        function findRepeatingSubstrings(str) {
+            let substrings = {};
+            let length = str.length;
+
+            // すべてのサブストリングを調べる
+            for (let i = 0; i < length; i++) {
+                for (let j = i + 1; j <= length; j++) {
+                    let substring = str.substring(i, j);
+                    if (substring.length > 1) { // 1文字以上のサブストリング
+                        if (substrings[substring]) {
+                            substrings[substring]++;
+                        } else {
+                            substrings[substring] = 1;
+                        }
+                    }
+                }
+            }
+
+            // 繰り返されるサブストリングのみ抽出
+            return Object.keys(substrings).filter(key => substrings[key] > 1);
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert(`'${text}' をクリップボードにコピーしました`);
+            }).catch(err => {
+                console.error('クリップボードへのコピーに失敗しました:', err);
+            });
+        }
     </script>
 </body>
 </html>
