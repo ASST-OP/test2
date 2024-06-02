@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>連続して繰り返される文字列の一覧</title>
+    <title>繰り返される文字列の一覧</title>
     <style>
         .substring {
             display: inline-block;
@@ -18,7 +18,7 @@
     </style>
 </head>
 <body>
-    <h1>連続して繰り返される文字列の一覧を表示1.02</h1>
+    <h1>繰り返される文字列の一覧を表示</h1>
     <input type="text" id="inputString" placeholder="文字列を入力してください">
     <button onclick="displayRepeatingSubstrings()">表示</button>
     <div id="result"></div>
@@ -27,12 +27,13 @@
         function displayRepeatingSubstrings() {
             let inputString = document.getElementById('inputString').value;
             let substrings = findRepeatingSubstrings(inputString);
+            let uniqueSubstrings = filterUniqueSubstrings(substrings);
             
             let resultDiv = document.getElementById('result');
             resultDiv.innerHTML = ''; // 結果をクリア
 
-            if (substrings.length > 0) {
-                substrings.forEach(substring => {
+            if (uniqueSubstrings.length > 0) {
+                uniqueSubstrings.forEach(substring => {
                     let substringElement = document.createElement('span');
                     substringElement.className = 'substring';
                     substringElement.textContent = substring;
@@ -40,28 +41,43 @@
                     resultDiv.appendChild(substringElement);
                 });
             } else {
-                resultDiv.innerHTML = '<p>連続して繰り返される文字列はありません。</p>';
+                resultDiv.innerHTML = '<p>繰り返される文字列はありません。</p>';
             }
         }
 
         function findRepeatingSubstrings(str) {
-            let repeatingSubstrings = new Set();
+            let substrings = {};
             let length = str.length;
 
             // すべてのサブストリングを調べる
             for (let i = 0; i < length; i++) {
                 for (let j = i + 1; j <= length; j++) {
                     let substring = str.substring(i, j);
-                    let repeatedSubstring = substring + substring;
-                    
-                    // 元の文字列内に連続して繰り返される部分があるか確認
-                    if (str.indexOf(repeatedSubstring) !== -1) {
-                        repeatingSubstrings.add(substring);
+                    if (substring.length > 1) { // 1文字以上のサブストリング
+                        if (substrings[substring]) {
+                            substrings[substring]++;
+                        } else {
+                            substrings[substring] = 1;
+                        }
                     }
                 }
             }
 
-            return Array.from(repeatingSubstrings);
+            // 繰り返されるサブストリングのみ抽出
+            return Object.keys(substrings).filter(key => substrings[key] > 1);
+        }
+
+        function filterUniqueSubstrings(substrings) {
+            substrings.sort((a, b) => b.length - a.length); // 長さの降順でソート
+            let uniqueSubstrings = [];
+
+            substrings.forEach(substring => {
+                if (!uniqueSubstrings.some(uniq => uniq.includes(substring))) {
+                    uniqueSubstrings.push(substring);
+                }
+            });
+
+            return uniqueSubstrings;
         }
 
         function copyToClipboard(text) {
