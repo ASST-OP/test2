@@ -18,7 +18,7 @@
     </style>
 </head>
 <body>
-    <h1>繰り返される文字列の一覧</h1>
+    <h1>繰り返される文字列の一覧を表示</h1>
     <input type="text" id="inputString" placeholder="文字列を入力してください">
     <button onclick="displayRepeatingSubstrings()">表示</button>
     <div id="result"></div>
@@ -28,12 +28,13 @@
             let inputString = document.getElementById('inputString').value;
             let substrings = findRepeatingSubstrings(inputString);
             let uniqueSubstrings = filterUniqueSubstrings(substrings);
+            let finalSubstrings = filterSubstringsWithinSubstrings(uniqueSubstrings);
             
             let resultDiv = document.getElementById('result');
             resultDiv.innerHTML = ''; // 結果をクリア
 
-            if (uniqueSubstrings.length > 0) {
-                uniqueSubstrings.forEach(substring => {
+            if (finalSubstrings.length > 0) {
+                finalSubstrings.forEach(substring => {
                     let substringElement = document.createElement('span');
                     substringElement.className = 'substring';
                     substringElement.textContent = substring;
@@ -78,6 +79,25 @@
             });
 
             return uniqueSubstrings;
+        }
+
+        function filterSubstringsWithinSubstrings(substrings) {
+            let finalSubstrings = [];
+
+            substrings.forEach(substring => {
+                let found = false;
+                for (let finalSubstring of finalSubstrings) {
+                    if (finalSubstring.includes(substring)) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    finalSubstrings.push(substring);
+                }
+            });
+
+            return finalSubstrings;
         }
 
         function copyToClipboard(text) {
