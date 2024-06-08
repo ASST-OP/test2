@@ -2,8 +2,7 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>繰り返されている文字列を表示してコピー</title>
+    <title>test</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -20,7 +19,7 @@
     </style>
 </head>
 <body>
-    <h1>繰り返されている文字列を表示してコピー</h1>
+    <h1>繰り返し検知</h1>
     <label for="inputString">文字列を入力してください:</label>
     <input type="text" id="inputString">
     <button onclick="findAndDisplayRepeats()">表示</button>
@@ -34,7 +33,6 @@
             const resultDiv = document.getElementById('result');
             const copyButton = document.getElementById('copyButton');
 
-            // 繰り返しを見つける関数
             function findRepeats(str) {
                 const repeats = new Set();
                 const length = str.length;
@@ -75,7 +73,7 @@
             document.execCommand('copy');
             document.body.removeChild(textarea);
 
-            alert('結果がクリップボードにコピーされました。');
+            alert('コピーしました');
         }
     </script>
 </body>
