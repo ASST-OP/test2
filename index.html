@@ -52,7 +52,12 @@
                     }
                 }
 
-                return Array.from(repeats).sort((a, b) => b.length - a.length);
+                const sortedRepeats = Array.from(repeats).sort((a, b) => b.length - a.length);
+                const uniqueRepeats = sortedRepeats.filter((item, index, self) =>
+                    !self.some((otherItem, otherIndex) => otherIndex !== index && otherItem.includes(item))
+                );
+
+                return uniqueRepeats;
             }
 
             const repeats = findRepeats(inputString);
