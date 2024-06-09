@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>test3</title>
+    <title>test</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -67,7 +67,7 @@
                 for (let i = 0; i < length; i++) {
                     for (let j = i + 1; j <= length; j++) {
                         const substr = str.slice(i, j);
-                        if (!repeats.some(r => r.includes(substr))) {
+                        if (!repeats.includes(substr)) {
                             nonRepeats.add(substr);
                         }
                     }
