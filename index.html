@@ -33,6 +33,10 @@
             const resultDiv = document.getElementById('result');
             const copyButton = document.getElementById('copyButton');
 
+            function escapeRegExp(string) {
+                return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            }
+
             function findRepeats(str) {
                 const repeats = new Set();
                 const length = str.length;
@@ -40,7 +44,8 @@
                 for (let i = 0; i < length; i++) {
                     for (let j = i + 1; j <= length; j++) {
                         const substr = str.slice(i, j);
-                        const regex = new RegExp(substr, 'g');
+                        const escapedSubstr = substr.split('').map(char => escapeRegExp(char)).join('');
+                        const regex = new RegExp(escapedSubstr, 'g');
                         const match = str.match(regex);
                         if (match && match.length > 1) {
                             repeats.add(substr);
