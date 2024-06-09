@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>test1</title>
+    <title>test</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -16,7 +16,6 @@
         .copyButton {
             margin-left: 10px;
             cursor: pointer;
-            color: blue;
         }
     </style>
 </head>
@@ -61,8 +60,7 @@
             if (repeats.length > 0) {
                 resultDiv.innerHTML = `<p>繰り返されている文字列:</p><ul>${repeats.map(r => `
                     <li>
-                        ${r} 
-                        <span class="copyButton" onclick="copyTextToClipboard('${r}')">コピー</span>
+                        <button class="copyButton" onclick="copyTextToClipboard('${r}')">${r}</button>
                     </li>`).join('')}</ul>`;
             } else {
                 resultDiv.innerHTML = `<p>繰り返されている文字列は見つかりませんでした。</p>`;
