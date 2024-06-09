@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>test2</title>
+    <title>test</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -60,7 +60,24 @@
                 return uniqueRepeats;
             }
 
+            function findNonRepeats(str, repeats) {
+                const nonRepeats = new Set();
+                const length = str.length;
+
+                for (let i = 0; i < length; i++) {
+                    for (let j = i + 1; j <= length; j++) {
+                        const substr = str.slice(i, j);
+                        if (!repeats.some(r => r.includes(substr))) {
+                            nonRepeats.add(substr);
+                        }
+                    }
+                }
+
+                return Array.from(nonRepeats).sort((a, b) => b.length - a.length);
+            }
+
             const repeats = findRepeats(inputString);
+            const nonRepeats = findNonRepeats(inputString, repeats);
 
             if (repeats.length > 0) {
                 resultDiv.innerHTML = `<p>繰り返されている文字列:</p><ul>${repeats.map(r => `
@@ -69,6 +86,11 @@
                     </li>`).join('')}</ul>`;
             } else {
                 resultDiv.innerHTML = `<p>繰り返されている文字列は見つかりませんでした。</p>`;
+            }
+
+            if (nonRepeats.length > 0) {
+                resultDiv.innerHTML += `<p>繰り返されなかった文字列:</p><ul>${nonRepeats.map(nr => `
+                    <li>${nr}</li>`).join('')}</ul>`;
             }
         }
 
