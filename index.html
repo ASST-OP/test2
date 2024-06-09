@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>test</title>
+    <title>test1</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,8 +13,10 @@
             border: 1px solid #ccc;
             background-color: #f9f9f9;
         }
-        #copyButton {
-            margin-top: 10px;
+        .copyButton {
+            margin-left: 10px;
+            cursor: pointer;
+            color: blue;
         }
     </style>
 </head>
@@ -25,13 +27,11 @@
     <button onclick="findAndDisplayRepeats()">表示</button>
     
     <div id="result"></div>
-    <button id="copyButton" style="display:none;" onclick="copyToClipboard()">コピー</button>
 
     <script>
         function findAndDisplayRepeats() {
             const inputString = document.getElementById('inputString').value;
             const resultDiv = document.getElementById('result');
-            const copyButton = document.getElementById('copyButton');
 
             function escapeRegExp(string) {
                 return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -59,26 +59,24 @@
             const repeats = findRepeats(inputString);
 
             if (repeats.length > 0) {
-                resultDiv.innerHTML = `<p>繰り返されている文字列:</p><ul>${repeats.map(r => `<li>${r}</li>`).join('')}</ul>`;
-                copyButton.style.display = 'inline';
+                resultDiv.innerHTML = `<p>繰り返されている文字列:</p><ul>${repeats.map(r => `
+                    <li>
+                        ${r} 
+                        <span class="copyButton" onclick="copyTextToClipboard('${r}')">コピー</span>
+                    </li>`).join('')}</ul>`;
             } else {
                 resultDiv.innerHTML = `<p>繰り返されている文字列は見つかりませんでした。</p>`;
-                copyButton.style.display = 'none';
             }
         }
 
-        function copyToClipboard() {
-            const resultDiv = document.getElementById('result');
-            const text = resultDiv.innerText;
-
+        function copyTextToClipboard(text) {
             const textarea = document.createElement('textarea');
             textarea.value = text;
             document.body.appendChild(textarea);
             textarea.select();
             document.execCommand('copy');
             document.body.removeChild(textarea);
-
-            alert('コピーしました');
+            alert('コピーしました: ' + text);
         }
     </script>
 </body>
